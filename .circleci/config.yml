@@ -1,0 +1,42 @@
+version: 2
+jobs:
+  build:
+    docker:
+      - image: circleci/python:3.6
+      
+      # Specify service dependencies here if necessary
+      # CircleCI maintains a library of pre-built images
+      # documented at https://circleci.com/docs/2.0/circleci-images/
+      - image: circleci/postgres:10
+        environment:
+          POSTGRES_USER: circleci
+          POSTGRES_DB: requestbin
+
+    working_directory: ~/app
+
+    steps:
+      - checkout
+
+      # Download and cache dependencies
+      - restore_cache:
+          keys:
+            - cache-{{ checksum "Pipfile.lock" }}
+            - cache-
+
+      - run:
+          name: Install dependencies
+          command: pipenv sync --dev
+
+      - save_cache:
+          key: cache-{{ checksum "Pipfile.lock" }}
+          paths:
+            - ~/.local
+            - ~/.cache
+        
+      - run:
+          name: run tests
+          command: pipenv run pytest
+
+      - store_artifacts:
+          path: test-reports
+          destination: test-reports

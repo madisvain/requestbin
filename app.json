@@ -1,0 +1,28 @@
+{
+  "name": "Requestbin app",
+  "description": "Inspect HTTP Requests",
+  "website": "https://requestbin.app",
+  "repository": "https://github.com/madisvain/requestbin",
+  "stack": "heroku-18",
+  "keywords": [
+    "python",
+    "sanic",
+    "request bin",
+    "request inspect",
+    "request capture"
+  ],
+  "env": {
+    "NODE_ENV": "development",
+    "WEB_CONCURRENCY": {
+      "description": "The number of gunicorn workers to run.",
+      "value": "2"
+    },
+    "SENTRY_DSN": {
+      "description": "To enable Sentry integration provide your Sentry DSN.",
+      "required": false
+    }
+  },
+  "addons": [
+    "heroku-postgresql"
+  ]
+}

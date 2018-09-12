@@ -1,0 +1,26 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+sanic = "*"
+gunicorn = "*"
+raven = {extras = ["sanic"]}
+blinker = "*"
+shortuuid = "*"
+peewee = "*"
+"psycopg2-binary" = "*"
+gevent = "*"
+greenlet = {version = "*", platform_python_implementation="=='CPython'"}
+marshmallow = "*"
+pytest = "*"
+requests = "*"
+
+[dev-packages]
+black = "*"
+pylint = "*"
+aiohttp = "*"
+
+[requires]
+python_version = "3.6"
