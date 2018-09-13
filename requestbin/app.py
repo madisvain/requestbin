@@ -52,15 +52,15 @@ async def session(request, response):
 async def index(request):
     if request.method == "HEAD":
         return html("")
-    return await file("./requestbin/web/dist/index.html")
+    return await file("./requestbin/web/index.html")
 
 
 # Static content
-app.static("/index.html", "./requestbin/web/dist/")
-app.static("/", "./requestbin/web/dist/", pattern=r".*?\.(?:js|css)$")
-app.static("/static/", "./requestbin/web/dist/static")
-app.static("/favicon.ico", "./requestbin/web/dist/favicon.ico")
-app.static("/robots.txt", "./requestbin/web/dist/robots.txt")
+app.static("/index.html", "./requestbin/web/")
+app.static("/", "./requestbin/web/", pattern=r".*?\.(?:js|css)$")
+app.static("/static/", "./requestbin/web/static")
+app.static("/favicon.ico", "./requestbin/web/favicon.ico")
+app.static("/robots.txt", "./requestbin/web/robots.txt")
 
 
 """ Requestbin
