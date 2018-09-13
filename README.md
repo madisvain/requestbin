@@ -1,3 +1,5 @@
+[![CircleCI](https://circleci.com/gh/madisvain/requestbin.svg?style=svg)](https://circleci.com/gh/madisvain/requestbin)
+
 # RequestBin
 RequestBin is a free service for inspecting HTTP Requests.
 
