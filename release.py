@@ -17,7 +17,6 @@ if len(assets) > 0:
                 f.write(chunk)
 
     z = zipfile.ZipFile("web.zip")
-    print(os.path.join(BASE_DIR, "requestbin", "web"))
     z.extractall(os.path.join(BASE_DIR, "requestbin", "web"))
 
     os.remove("web.zip")
