@@ -16,6 +16,7 @@ greenlet = {version = "*", platform_python_implementation="=='CPython'"}
 marshmallow = "*"
 pytest = "*"
 requests = "*"
+aiohttp = "*"
 
 [dev-packages]
 black = "*"

@@ -12,14 +12,16 @@ class TestBinsApi(TestBase):
         assert isinstance(response.json, list)
 
     def test_create(self):
-        request, response = app.test_client.post("/api/bins/", json={"private": True})
+        request, response = app.test_client.post(
+            "/api/bins/", json={"name": "random", "private": True}
+        )
         assert response.status == 201
         assert isinstance(response.json, dict)
         assert "id" in response.json
         assert response.json.get("private") == True
 
     def test_detail(self):
-        b = Bin.create(private=True)
+        b = Bin.create(name="random", private=True)
         request, response = app.test_client.get(f"/api/bins/{b.id}")
         assert response.status == 200
         assert isinstance(response.json, dict)
@@ -27,7 +29,7 @@ class TestBinsApi(TestBase):
         assert response.json.get("private") == True
 
     def test_delete(self):
-        b = Bin.create(private=True)
+        b = Bin.create(name="random", private=True)
         request, response = app.test_client.delete(f"/api/bins/{b.id}")
         assert response.status == 200
 

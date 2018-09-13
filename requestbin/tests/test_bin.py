@@ -7,7 +7,7 @@ from requestbin.tests import TestBase
 
 class TestBin(TestBase):
     def test_json_request(self):
-        b = Bin.create(private=True)
+        b = Bin.create(name="random", private=True)
         suuid = shortuuid.encode(b.id)
         request, response = app.test_client.post(f"/{suuid}/", json={"key": "value"})
         assert response.status == 200

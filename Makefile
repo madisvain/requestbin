@@ -1,5 +1,5 @@
 run:
-	pipenv run gunicorn requestbin.app:app -b 127.0.0.1:5000 --worker-class sanic.worker.GunicornWorker --workers 2 --reload
+	pipenv run gunicorn requestbin.app:app -b 127.0.0.1:5000 --worker-class sanic.worker.GunicornWorker --workers 1 --reload
 
 test:
-	pipenv run pytest -s --ignore=requestbin/web
+	pipenv run pytest --ignore=requestbin/web

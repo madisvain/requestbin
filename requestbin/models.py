@@ -26,7 +26,7 @@ class Bin(Model):
     secret = CharField(default=secrets.token_hex(16), max_length=40)
     response_status = IntegerField(default=200)
     response_content_type = CharField(max_length=100, default="application/json")
-    response_body = TextField()
+    response_body = TextField(default={})
     created_at = DateTimeField(default=datetime.datetime.utcnow())
 
     class Meta:

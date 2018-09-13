@@ -12,21 +12,38 @@ class TestRequestsApi(TestBase):
         assert isinstance(response.json, list)
 
     def test_detail(self):
-        b = Bin.create(private=True)
+        b = Bin.create(name="random", private=True)
         r = Request.create(
-            bin=b, ip="127.0.0.1", json={}, headers={}, body=b"", port="8000"
+            bin=b,
+            method="get",
+            ip="127.0.0.1",
+            json={},
+            headers={},
+            body=b"",
+            port="8000",
+            size=100,
+            time=100
         )
         request, response = app.test_client.get(f"/api/requests/{r.id}")
         assert response.status == 200
         assert isinstance(response.json, dict)
         assert "id" in response.json
+        assert response.json.get("method") == "get"
         assert response.json.get("ip") == "127.0.0.1"
         assert isinstance(response.json.get("json"), dict)
 
     def test_delete(self):
-        b = Bin.create(private=True)
+        b = Bin.create(name="random", private=True)
         r = Request.create(
-            bin=b, ip="127.0.0.1", json={}, headers={}, body=b"", port="8000"
+            bin=b,
+            method="get",
+            ip="127.0.0.1",
+            json={},
+            headers={},
+            body=b"",
+            port="8000",
+            size=100,
+            time=100
         )
         request, response = app.test_client.delete(f"/api/requests/{r.id}")
         assert response.status == 200
