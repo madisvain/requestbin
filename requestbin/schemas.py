@@ -38,6 +38,8 @@ class RequestSchema(Schema):
     form = fields.Dict(dump_only=True)
     ip = fields.String(dump_only=True)
     port = fields.String(dump_only=True)
+    time = fields.Integer(dump_only=True)
+    size = fields.Integer(dump_only=True)
     created_at = fields.DateTime(dump_only=True)
 
     @pre_load

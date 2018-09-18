@@ -14,7 +14,7 @@ bins = Blueprint("bins", url_prefix="/api/bins")
 
 @bins.route("/", methods=["GET"])
 async def list_view(request):
-    bins = Bin.select().order_by(Bin.created_at.desc())
+    bins = Bin.select().order_by(Bin.name.asc())
     return json(BinSchema(many=True).dump(bins))
 
 
