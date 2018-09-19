@@ -10,7 +10,7 @@ requests = Blueprint("requests", url_prefix="/api/requests")
 
 @requests.route("/", methods=["GET"])
 async def list_view(request):
-    requests = Request.select().order_by(Request.created_at.asc())
+    requests = Request.select().order_by(Request.created_at.desc())
     if "bin" in request.raw_args:
         requests = requests.filter(bin=request.raw_args["bin"])
     return json(RequestSchema(many=True).dump(requests))
