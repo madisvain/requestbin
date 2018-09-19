@@ -10,7 +10,7 @@ class TestRequestsApi(TestBase):
         request, response = app.test_client.get("/api/requests/")
         assert response.status == 200
         assert isinstance(response.json, list)
-    
+
     def test_list_filter(self):
         b1 = Bin.create(name="random1", private=True)
         b2 = Bin.create(name="random1", private=True)
@@ -23,7 +23,7 @@ class TestRequestsApi(TestBase):
             body=b"",
             port="8000",
             size=100,
-            time=100
+            time=100,
         )
         r1 = Request.create(
             bin=b2,
@@ -34,10 +34,12 @@ class TestRequestsApi(TestBase):
             body=b"",
             port="8000",
             size=100,
-            time=100
+            time=100,
         )
 
-        request, response = app.test_client.get("/api/requests/", params={"bin": str(b1.id)})
+        request, response = app.test_client.get(
+            "/api/requests/", params={"bin": str(b1.id)}
+        )
         assert response.status == 200
         assert isinstance(response.json, list)
         assert len(response.json) == 1
@@ -53,7 +55,7 @@ class TestRequestsApi(TestBase):
             body=b"",
             port="8000",
             size=100,
-            time=100
+            time=100,
         )
         request, response = app.test_client.get(f"/api/requests/{r.id}")
         assert response.status == 200
@@ -74,7 +76,7 @@ class TestRequestsApi(TestBase):
             body=b"",
             port="8000",
             size=100,
-            time=100
+            time=100,
         )
         request, response = app.test_client.delete(f"/api/requests/{r.id}")
         assert response.status == 200

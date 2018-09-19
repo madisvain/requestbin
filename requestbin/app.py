@@ -2,6 +2,7 @@ import os
 import secrets
 import shortuuid
 import sys
+import time
 import uuid
 
 from sanic import Sanic
@@ -44,6 +45,11 @@ async def session(request, response):
         response.cookies["session"] = secrets.token_hex(32)
 
 
+@app.middleware('request')
+async def add_start_time(request):
+    request['start_time'] = time.time()
+
+
 """ Website
 """
 
@@ -81,7 +87,7 @@ async def requestbin(request, suuid):
             body=request.body,
             ip=request.ip,
             port=request.port,
-            time=0,
+            time=round((time.time() - request['start_time']) * 1000),
             size=sys.getsizeof(request.body),
         )
         return text("ok\n", status=200)

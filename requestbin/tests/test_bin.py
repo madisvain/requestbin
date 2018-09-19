@@ -12,9 +12,9 @@ class TestBin(TestBase):
         request, response = app.test_client.post(f"/{suuid}/", json={"key": "value"})
         assert response.status == 200
 
-        request, response = app.test_client.get(
-            f"/api/requests/?bin={b.id}", json={"key": "value"}
-        )
+        request, response = app.test_client.get(f"/api/requests/?bin={b.id}")
         assert isinstance(response.json, list)
         assert len(response.json) == 1
         assert response.json[0]["json"].get("key") == "value"
+        assert isinstance(response.json[0]["time"], int)
+        assert isinstance(response.json[0]["size"], int)
