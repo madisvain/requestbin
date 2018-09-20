@@ -1,3 +1,4 @@
+import secrets
 import uuid
 
 from requestbin.app import app
@@ -12,8 +13,8 @@ class TestRequestsApi(TestBase):
         assert isinstance(response.json, list)
 
     def test_list_filter(self):
-        b1 = Bin.create(name="random1", private=True)
-        b2 = Bin.create(name="random1", private=True)
+        b1 = Bin.create(session=secrets.token_hex(32), name="random1", private=True)
+        b2 = Bin.create(session=secrets.token_hex(32), name="random1", private=True)
         r1 = Request.create(
             bin=b1,
             method="get",
@@ -45,7 +46,7 @@ class TestRequestsApi(TestBase):
         assert len(response.json) == 1
 
     def test_detail(self):
-        b = Bin.create(name="random", private=True)
+        b = Bin.create(session=secrets.token_hex(32), name="random", private=True)
         r = Request.create(
             bin=b,
             method="get",
@@ -66,7 +67,7 @@ class TestRequestsApi(TestBase):
         assert isinstance(response.json.get("json"), dict)
 
     def test_delete(self):
-        b = Bin.create(name="random", private=True)
+        b = Bin.create(session=secrets.token_hex(32), name="random", private=True)
         r = Request.create(
             bin=b,
             method="get",

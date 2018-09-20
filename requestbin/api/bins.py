@@ -24,6 +24,10 @@ async def create_view(request):
         validated_data = BinSchema().load(request.json)
     except ValidationError as err:
         return json(err.messages, status=400)
+    
+    # Set the session from the request cookie
+    validated_data.update({"session": request.cookies.get("session")})
+
     b = Bin.create(**validated_data)
     return json(BinSchema().dump(b), status=201)
 

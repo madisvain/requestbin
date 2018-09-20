@@ -1,3 +1,4 @@
+import secrets
 import shortuuid
 
 from requestbin.app import app
@@ -7,7 +8,7 @@ from requestbin.tests import TestBase
 
 class TestBin(TestBase):
     def test_json_request(self):
-        b = Bin.create(name="random", private=True)
+        b = Bin.create(session=secrets.token_hex(32), name="random", private=True)
         suuid = shortuuid.encode(b.id)
         request, response = app.test_client.post(f"/{suuid}/", json={"key": "value"})
         assert response.status == 200
