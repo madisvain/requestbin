@@ -1,7 +1,7 @@
 from sanic import Blueprint
 from sanic.response import json
 
-from requestbin.models import Request
+from requestbin.models import Bin, Request
 from requestbin.schemas import RequestSchema
 
 
@@ -10,7 +10,12 @@ requests = Blueprint("requests", url_prefix="/api/requests")
 
 @requests.route("/", methods=["GET"])
 async def list_view(request):
-    requests = Request.select().order_by(Request.created_at.desc())
+    requests = (
+        Request.select()
+        .join(Bin)
+        .where(Bin.session == request.cookies.get("session"))
+        .order_by(Request.created_at.desc())
+    )
     if "bin" in request.raw_args:
         requests = requests.filter(bin=request.raw_args["bin"])
     return json(RequestSchema(many=True).dump(requests))

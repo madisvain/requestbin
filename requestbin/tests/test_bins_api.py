@@ -32,9 +32,18 @@ class TestBinsApi(TestBase):
         assert response.json.get("private") == True
 
     def test_delete(self):
-        b = Bin.create(session=secrets.token_hex(32), name="random", private=True)
-        request, response = app.test_client.delete(f"/api/bins/{b.id}")
+        session = secrets.token_hex(32)
+        b = Bin.create(session=session, name="random", private=True)
+        request, response = app.test_client.delete(
+            f"/api/bins/{b.id}", cookies={"session": session}
+        )
         assert response.status == 200
+
+    def test_delete_unauthorized(self):
+        session = secrets.token_hex(32)
+        b = Bin.create(session=session, name="random", private=True)
+        request, response = app.test_client.delete(f"/api/bins/{b.id}")
+        assert response.status == 400
 
     def test_delete_failure(self):
         request, response = app.test_client.delete(f"/api/bins/{uuid.uuid4()}")

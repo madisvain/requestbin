@@ -14,7 +14,11 @@ bins = Blueprint("bins", url_prefix="/api/bins")
 
 @bins.route("/", methods=["GET"])
 async def list_view(request):
-    bins = Bin.select().order_by(Bin.name.desc())
+    bins = (
+        Bin.select()
+        .filter(session=request.cookies.get("session"))
+        .order_by(Bin.name.desc())
+    )
     return json(BinSchema(many=True).dump(bins))
 
 
@@ -24,7 +28,7 @@ async def create_view(request):
         validated_data = BinSchema().load(request.json)
     except ValidationError as err:
         return json(err.messages, status=400)
-    
+
     # Set the session from the request cookie
     validated_data.update({"session": request.cookies.get("session")})
 
@@ -41,7 +45,11 @@ async def detail_view(request, uuid):
 @bins.route("/<uuid>", methods=["DELETE"])
 async def delete_view(request, uuid):
     try:
-        Bin.get(Bin.id == uuid).delete_instance()
-        return json("", status=200)
+        bin = Bin.get(Bin.id == uuid)
+        if bin.session == request.cookies.get("session"):
+            bin.delete_instance()
+            return json("", status=200)
+        else:
+            return json("", status=400)
     except Bin.DoesNotExist:
         return json("", status=410)

@@ -13,8 +13,9 @@ class TestRequestsApi(TestBase):
         assert isinstance(response.json, list)
 
     def test_list_filter(self):
-        b1 = Bin.create(session=secrets.token_hex(32), name="random1", private=True)
-        b2 = Bin.create(session=secrets.token_hex(32), name="random1", private=True)
+        session = secrets.token_hex(32)
+        b1 = Bin.create(session=session, name="random1", private=True)
+        b2 = Bin.create(session=session, name="random1", private=True)
         r1 = Request.create(
             bin=b1,
             method="get",
@@ -39,7 +40,7 @@ class TestRequestsApi(TestBase):
         )
 
         request, response = app.test_client.get(
-            "/api/requests/", params={"bin": str(b1.id)}
+            "/api/requests/", params={"bin": str(b1.id)}, cookies={"session": session}
         )
         assert response.status == 200
         assert isinstance(response.json, list)
