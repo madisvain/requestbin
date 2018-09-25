@@ -12,6 +12,18 @@ class TestBinsApi(TestBase):
         assert response.status == 200
         assert isinstance(response.json, list)
 
+    def test_list_authorization(self):
+        session1 = secrets.token_hex(32)
+        session2 = secrets.token_hex(32)
+        b1 = Bin.create(session=session1, name="random 1", private=True)
+        b2 = Bin.create(session=session2, name="random 2", private=True)
+        request, response = app.test_client.get(
+            "/api/bins/", cookies={"session": session1}
+        )
+        assert response.status == 200
+        assert isinstance(response.json, list)
+        assert len(response.json) == 1
+
     def test_create(self):
         request, response = app.test_client.post(
             "/api/bins/",
@@ -22,6 +34,16 @@ class TestBinsApi(TestBase):
         assert isinstance(response.json, dict)
         assert "id" in response.json
         assert response.json.get("private") == True
+    
+    def test_create_validation(self):
+        request, response = app.test_client.post(
+            "/api/bins/",
+            json={},
+            cookies={"session": secrets.token_hex(32)},
+        )
+        assert response.status == 400
+        assert isinstance(response.json, dict)
+        assert "name" in response.json
 
     def test_detail(self):
         b = Bin.create(session=secrets.token_hex(32), name="random", private=True)
@@ -30,6 +52,10 @@ class TestBinsApi(TestBase):
         assert isinstance(response.json, dict)
         assert "id" in response.json
         assert response.json.get("private") == True
+    
+    def test_detail_does_not_exist(self):
+        request, response = app.test_client.get(f"/api/bins/{uuid.uuid4()}")
+        assert response.status == 400
 
     def test_delete(self):
         session = secrets.token_hex(32)

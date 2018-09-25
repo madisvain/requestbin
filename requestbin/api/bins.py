@@ -2,6 +2,7 @@ import shortuuid
 import uuid
 
 from marshmallow import ValidationError
+from peewee import DoesNotExist
 from sanic import Blueprint
 from sanic.response import json
 
@@ -38,7 +39,10 @@ async def create_view(request):
 
 @bins.route("/<uuid>", methods=["GET"])
 async def detail_view(request, uuid):
-    b = Bin.get(Bin.id == uuid)
+    try:
+        b = Bin.get(Bin.id == uuid)
+    except DoesNotExist:
+        return json("", status=400)
     return json(BinSchema().dump(b))
 
 

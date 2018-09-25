@@ -10,7 +10,7 @@ from requestbin.models import Bin, Request
 
 class BinSchema(Schema):
     id = fields.UUID(dump_only=True)
-    name = fields.String(required=False)
+    name = fields.String(required=True)
     private = fields.Boolean()
     created_at = fields.DateTime(dump_only=True)
 
