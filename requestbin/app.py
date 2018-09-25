@@ -33,6 +33,9 @@ async def initialize(app, loop):
     db.create_tables(models=[Bin, Request])
     make_psycopg_green()
 
+    print("- - - - - CWD")
+    print(os.getcwd())
+
 
 """ Middleware
 """
