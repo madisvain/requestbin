@@ -5,6 +5,7 @@ import sys
 import time
 import uuid
 
+from peewee import DoesNotExist
 from sanic import Sanic
 from sanic.constants import HTTP_METHODS
 from sanic.response import file, json, html, text
@@ -45,53 +46,59 @@ async def session(request, response):
         response.cookies["session"] = secrets.token_hex(32)
 
 
-@app.middleware('request')
+@app.middleware("request")
 async def add_start_time(request):
-    request['start_time'] = time.time()
-
-
-""" Website
-"""
-
-
-@app.route("/", methods=["GET", "HEAD"])
-async def index(request):
-    if request.method == "HEAD":
-        return html("")
-    return await file("./requestbin/web/index.html")
-
-
-# Static content
-app.static("/index.html", "./requestbin/web/")
-app.static("/", "./requestbin/web/", pattern=r".*?\.(?:js|css)$")
-app.static("/static/", "./requestbin/web/static")
-app.static("/favicon.ico", "./requestbin/web/favicon.ico")
-app.static("/robots.txt", "./requestbin/web/robots.txt")
+    request["start_time"] = time.time()
 
 
 """ Requestbin
 """
 
 
-@app.route("/<suuid:string>", methods=HTTP_METHODS)
+@app.route("/<suuid:.{22}>", methods=HTTP_METHODS)
 async def requestbin(request, suuid):
-    if len(suuid) == 22:
-        b = Bin.get(Bin.id == shortuuid.decode(suuid))
-        r = Request.create(
-            bin=b,
-            method=request.method,
-            headers=dict(request.headers),
-            json=dict(request.json) if request.json else dict(),
-            args=dict(request.args),
-            form=dict(request.form),
-            body=request.body,
-            ip=request.ip,
-            port=request.port,
-            time=round((time.time() - request['start_time']) * 1000),
-            size=sys.getsizeof(request.body),
-        )
-        return text("ok\n", status=200)
-    return text("not found\n", status=404)
+    bin_id = shortuuid.decode(suuid)
+    try:
+        b = Bin.get(Bin.id == bin_id)
+    except DoesNotExist:
+        return text("not found\n", status=404)
+
+    Request.create(
+        bin=b,
+        method=request.method,
+        headers=dict(request.headers),
+        json=dict(request.json) if request.json else dict(),
+        args=dict(request.args),
+        form=dict(request.form),
+        body=request.body,
+        ip=request.ip,
+        port=request.port,
+        time=round((time.time() - request["start_time"]) * 1000),
+        size=sys.getsizeof(request.body),
+    )
+    return text("ok\n", status=200)
+
+
+""" Static
+"""
+
+
+app.static("/", "./requestbin/web/", pattern=r".*?\.(?:js|css)$")
+app.static("/static/", "./requestbin/web/static")
+app.static("/favicon.ico", "./requestbin/web/favicon.ico")
+app.static("/robots.txt", "./requestbin/web/robots.txt")
+
+
+
+""" Website
+"""
+
+@app.route("/", methods=["GET", "HEAD"])
+@app.route("/<path:string>", methods=["GET", "HEAD"])
+async def index(request, path=None):
+    if request.method == "HEAD":
+        return html("")
+    return await file("./requestbin/web/index.html")
 
 
 if __name__ == "__main__":
