@@ -36,6 +36,7 @@ class RequestSchema(Schema):
     json = fields.Dict(dump_only=True)
     args = fields.Dict(dump_only=True)
     form = fields.Dict(dump_only=True)
+    body = fields.String(dump_only=True)
     ip = fields.String(dump_only=True)
     port = fields.String(dump_only=True)
     time = fields.Integer(dump_only=True)
