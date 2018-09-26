@@ -81,7 +81,7 @@ async def requestbin(request, suuid):
             bin=b,
             method=request.method,
             headers=dict(request.headers),
-            json=dict(request.json),
+            json=dict(request.json) if request.json else dict(),
             args=dict(request.args),
             form=dict(request.form),
             body=request.body,
