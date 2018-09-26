@@ -95,7 +95,8 @@ app.static("/robots.txt", "./requestbin/web/robots.txt")
 
 @app.route("/", methods=["GET", "HEAD"])
 @app.route("/<path:string>", methods=["GET", "HEAD"])
-async def index(request, path=None):
+@app.route("/<path:string>/<subpath:string>", methods=["GET", "HEAD"])
+async def index(request, path=None, subpath=None):
     if request.method == "HEAD":
         return html("")
     return await file("./requestbin/web/index.html")
