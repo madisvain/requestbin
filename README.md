@@ -16,6 +16,8 @@ RequestBin is built upon Sanic to achieve high throughput. The current setup can
 * [asyncpg](https://github.com/MagicStack/asyncpg)
 * [uvloop](https://github.com/MagicStack/uvloop)
 * [ultraJSON](https://github.com/esnme/ultrajson)
+* [React.js](https://reactjs.org/)
+* [antD](https://ant.design/)
 
 ## Development
 #### Virtualenv
