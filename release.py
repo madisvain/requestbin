@@ -1,4 +1,5 @@
 import os
+import shutil
 import requests
 import zipfile
 
@@ -17,6 +18,9 @@ if len(assets) > 0:
                 f.write(chunk)
 
     z = zipfile.ZipFile("web.zip")
-    z.extractall(os.path.join(BASE_DIR, "requestbin", "web"))
+    path = os.path.join(BASE_DIR, "requestbin", "web")
+    if os.path.exists(path) and os.path.isdir(path):
+        shutil.rmtree(path)
+    z.extractall(path)
 
     os.remove("web.zip")
