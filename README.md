@@ -20,7 +20,18 @@ RequestBin is built upon Sanic to achieve high throughput. The current setup can
 * [antD](https://ant.design/)
 
 ## API documentation
-...
+
+### Bins
+
+#### List
+#### Get
+#### Update
+#### Delete
+
+### Requests
+
+#### List
+#### Get
 
 ## Development
 #### Virtualenv
