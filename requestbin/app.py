@@ -16,8 +16,6 @@ from requestbin import api
 from requestbin.models import db, Bin, Request
 from requestbin.utils import cors, make_psycopg_green
 
-SITE_URL = "http://localhost:8000"
-
 
 app = Sanic()
 # Sentry

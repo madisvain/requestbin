@@ -3,8 +3,7 @@ import uuid
 
 from marshmallow import Schema, fields, post_dump, pre_load
 
-SITE_URL = "http://localhost:8000"
-# from requestbin.app import SITE_URL
+from requestbin import settings
 from requestbin.models import Bin, Request
 
 
@@ -24,7 +23,7 @@ class BinSchema(Schema):
             data = [data]
         for b in data:
             suuid = shortuuid.encode(uuid.UUID(b["id"]))
-            b["url"] = f"{SITE_URL}/{suuid}"
+            b["url"] = f"{settings.SITE_URL}/{suuid}"
         return data[0] if not many else data
 
 
