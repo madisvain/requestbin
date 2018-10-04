@@ -13,7 +13,10 @@ async def list_view(request):
     requests = (
         Request.select()
         .join(Bin)
-        .where(Bin.session == request.cookies.get("session"))
+        .where(
+            (Bin.session == request.cookies.get("session")) |
+            (Bin.secret == request.raw_args.get("secret", ""))
+        )
         .order_by(Request.created_at.desc())
     )
     if "bin" in request.raw_args:
