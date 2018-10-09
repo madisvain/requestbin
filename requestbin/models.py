@@ -23,7 +23,6 @@ class Bin(Model):
     id = UUIDField(primary_key=True, default=uuid.uuid4)
     session = CharField(max_length=64, index=True)
     name = CharField(max_length=40)
-    private = BooleanField(default=False, index=True)
     secret = CharField(default=secrets.token_hex(16), max_length=32)
     response_status = IntegerField(default=200)
     response_content_type = CharField(max_length=100, default="application/json")
